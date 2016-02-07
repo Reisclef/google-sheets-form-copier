@@ -5,12 +5,12 @@
     <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
     <script>
     function saveAndClose(){
-    var source = document.getElementById("source");
-    var sourceSheet = source.options[source.selectedIndex].value;
-    var target = document.getElementById("target");
-    var targetSheet = target.options[target.selectedIndex].value;
-    google.script.run.setPreferences(sourceSheet,targetSheet); 
-    google.script.host.close();
+      var source = document.getElementById("source");
+      var sourceSheet = source.options[source.selectedIndex].value;
+      var target = document.getElementById("target");
+      var targetSheet = target.options[target.selectedIndex].value;
+      google.script.run.setPreferences(sourceSheet,targetSheet); 
+      google.script.host.close();
     }
     </script>
   </head>
