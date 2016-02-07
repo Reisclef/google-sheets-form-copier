@@ -1,32 +1,37 @@
 /**
  * If there are more response lines than info lines. Add the missing formulae based on the 2nd row in Information (first row of data)
  */
-function refreshData() {
+function refreshData(){
   var lastResponse = getLastFormEntry();
   var lastInfo = getLastInformationRow();
-  if (lastResponse > lastInfo)
-  {
+  if (lastResponse > lastInfo){
     var copiedRow = getRowFormulae();
-    for (var r = lastInfo; r < lastResponse; r++)
-    {
-      var infoSheet = activateSheet("Information");
+    for (var r = lastInfo; r < lastResponse; r++){
+      var infoSheet = activateSheet("Target");
       var rowToChange = r + 1;
       copiedRow.copyTo(infoSheet.getRange(rowToChange + ":" + rowToChange));
     }
     Browser.msgBox(lastResponse - lastInfo + " rows added.",Browser.Buttons.OK);
   }
-  else
-  {
+  else{
     Browser.msgBox("Nothing to refresh.",Browser.Buttons.OK);
   }
+}
 
+function getSheetNames(){
+  var sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets();
+  var sheetNames = new Array();
+  for (var s = 0; s < sheets.length; s++){
+    sheetNames[s] = sheets[s].getName();
+  }
+  return sheetNames;
 }
 
 /**
  * Get the total number of form responses.
  */
 function getLastFormEntry(){
-  var responseSheet = activateSheet("Form responses 1");
+  var responseSheet = activateSheet("Source");
   return responseSheet.getLastRow();
 }
 
@@ -34,7 +39,7 @@ function getLastFormEntry(){
  * Get the total number of calculation rows.
  */
 function getLastInformationRow(){
-  var infoSheet = activateSheet("Information");
+  var infoSheet = activateSheet("Target");
   return infoSheet.getLastRow();
 }
 
@@ -42,7 +47,7 @@ function getLastInformationRow(){
  * Copy the first row of formulae the Information sheet (to avoid possible manual amendments)
  */
 function getRowFormulae(row) {
-  var infoSheet = activateSheet("Information");
+  var infoSheet = activateSheet("Target");
   var range = infoSheet.getRange("2:2");
   return range;
 }
