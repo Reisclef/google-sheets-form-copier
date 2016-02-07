@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    <script>
+    function saveAndClose(){
+    var source = document.getElementById("source");
+    var sourceSheet = source.options[source.selectedIndex].value;
+    var target = document.getElementById("target");
+    var targetSheet = target.options[target.selectedIndex].value;
+    google.script.run.setPreferences(sourceSheet,targetSheet); 
+    google.script.host.close();
+    }
+    </script>
+  </head>
+  <body>
+  <div>Source Sheet:
+   <select id="source">
+    <? 
+      var data = getSheetNames();
+      var prefs = getPreferences();
+      for (var i = 0; i < data.length; i++) { ?>
+        <option 
+        <? if (prefs['sourceSheet'] == data[i]) { ?> selected<? } ?> > <?= data[i] ?>
+        </option>
+    <? } ?>
+    </select>
+    </div>
+    <br />
+    <br />
+    <div>Target Sheet:&nbsp;
+    <select id="target">
+    <? 
+      for (var i = 0; i < data.length; i++) { ?>
+        <option 
+        <? if (prefs['targetSheet'] == data[i]) { ?> selected<? } ?> > <?= data[i] ?>
+        </option>
+    <? } ?>
+    </select>
+    </div>
+    <br />
+    <br />
+        <input type="button" value="Save and Close" onclick="saveAndClose()" />
+  </body>
+</html>
