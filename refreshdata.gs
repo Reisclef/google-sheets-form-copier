@@ -5,8 +5,8 @@ function refreshData(){
   var lastResponse = getLastFormEntry();
   var lastCalc = getLastInformationRow();
   if (lastResponse > lastCalc){
-    var copiedRow = getRowFormulae();
     var prefs = getPreferences();
+    var copiedRow = getRowFormulae(prefs['rowToCopy']);
     for (var r = lastCalc; r < lastResponse; r++){
       var infoSheet = activateSheet(prefs['targetSheet']);
       var rowToChange = r + 1;
@@ -52,7 +52,7 @@ function getLastInformationRow(){
 function getRowFormulae(row) {
   var prefs = getPreferences();
   var infoSheet = activateSheet(prefs['targetSheet']);
-  var range = infoSheet.getRange("2:2");
+  var range = infoSheet.getRange(row + ":" + row );
   return range;
 }
 
@@ -95,7 +95,8 @@ function getPreferences() {
   var userProperties = PropertiesService.getUserProperties();
   var prefs = {
     sourceSheet: userProperties.getProperty('sourceSheet'),
-    targetSheet: userProperties.getProperty('targetSheet')
+    targetSheet: userProperties.getProperty('targetSheet'),
+    rowToCopy: userProperties.getProperty('rowToCopy'),
   };
   return prefs;
 }
@@ -103,8 +104,9 @@ function getPreferences() {
  /* 
   * Set the user's preferences based on the function arguments
   */
-function setPreferences(source,target) {
+function setPreferences(source,target,row) {
   var userProperties = PropertiesService.getUserProperties()
   userProperties.setProperty('sourceSheet', source);
   userProperties.setProperty('targetSheet', target);
+  userProperties.setProperty('rowToCopy', row);
 }
