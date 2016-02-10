@@ -9,7 +9,8 @@
       var sourceSheet = source.options[source.selectedIndex].value;
       var target = document.getElementById("target");
       var targetSheet = target.options[target.selectedIndex].value;
-      google.script.run.setPreferences(sourceSheet,targetSheet); 
+      var rowToCopy = document.getElementById("row").value;
+      google.script.run.setPreferences(sourceSheet, targetSheet, rowToCopy); 
       google.script.host.close();
     }
     </script>
@@ -38,6 +39,11 @@
         </option>
     <? } ?>
     </select>
+    </div>
+    <br />
+    <br />
+    <div>Row to copy:&nbsp;&nbsp;
+    <input id="row" type="number" min="1" style="width:72px" value="<?= prefs['rowToCopy'] ?>" />
     </div>
     <br />
     <br />
