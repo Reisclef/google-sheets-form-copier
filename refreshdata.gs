@@ -2,20 +2,27 @@
  * If there are more response lines than info lines. Add the missing formulae based on the 2nd row in Information (first row of data)
  */
 function refreshData(){
-  var lastResponse = getLastFormEntry();
-  var lastCalc = getLastInformationRow();
-  if (lastResponse > lastCalc){
-    var prefs = getPreferences();
-    var copiedRow = getRowFormulae(prefs['rowToCopy']);
-    for (var r = lastCalc; r < lastResponse; r++){
-      var infoSheet = activateSheet(prefs['targetSheet']);
-      var rowToChange = r + 1;
-      copiedRow.copyTo(infoSheet.getRange(rowToChange + ":" + rowToChange));
+  if (checkPreferencesSet())
+  {
+    var lastResponse = getLastFormEntry();
+    var lastCalc = getLastInformationRow();
+    if (lastResponse > lastCalc){
+      var prefs = getPreferences();
+      var copiedRow = getRowFormulae(prefs['rowToCopy']);
+      for (var r = lastCalc; r < lastResponse; r++){
+        var infoSheet = activateSheet(prefs['targetSheet']);
+        var rowToChange = r + 1;
+        copiedRow.copyTo(infoSheet.getRange(rowToChange + ":" + rowToChange));
+      }
+      Browser.msgBox(lastResponse - lastCalc + " rows added.",Browser.Buttons.OK);
     }
-    Browser.msgBox(lastResponse - lastCalc + " rows added.",Browser.Buttons.OK);
+    else{
+      Browser.msgBox("Nothing to refresh.",Browser.Buttons.OK);
+    }
   }
-  else{
-    Browser.msgBox("Nothing to refresh.",Browser.Buttons.OK);
+  else {
+    displayOptions();
+    Browser.msgBox("You must set the source sheet, target sheet, and row to copy.",Browser.Buttons.OK);
   }
 }
 
@@ -92,7 +99,7 @@ function displayOptions(){
   * Return user's preferences for source and target spreadsheet
   */
 function getPreferences() {
-  var userProperties = PropertiesService.getUserProperties();
+  var userProperties = PropertiesService.getDocumentProperties();
   var prefs = {
     sourceSheet: userProperties.getProperty('sourceSheet'),
     targetSheet: userProperties.getProperty('targetSheet'),
@@ -105,8 +112,25 @@ function getPreferences() {
   * Set the user's preferences based on the function arguments
   */
 function setPreferences(source,target,row) {
-  var userProperties = PropertiesService.getUserProperties()
+  var userProperties = PropertiesService.getDocumentProperties();
   userProperties.setProperty('sourceSheet', source);
   userProperties.setProperty('targetSheet', target);
   userProperties.setProperty('rowToCopy', row);
+}
+
+/*
+ * Returns true if all settings are set, otherwise false.
+ */
+function checkPreferencesSet() {
+  var valid = true;
+  var settings = Array('sourceSheet','targetSheet','rowToCopy');
+  var i = 0;
+  var props = PropertiesService.getDocumentProperties();
+  while (i < settings.length && valid) {
+    if (props.getProperty(settings[i]) == null) {
+      valid = false;
+    }
+    i++;
+  }
+  return valid;
 }
