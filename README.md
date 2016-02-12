@@ -1,10 +1,16 @@
 # google-sheets-form-copier
 Google Apps Script to copy calculations (as they are inserted, not entered)
 
-v1 - This currently houses the apps script to add a menu item to manually call a refresh. It goes from 'Form responses 1' to "Information". It copies the fomula based on row 2 of the information sheet.
+Google Sheets, in conjunction with Google Forms are great tools for recordng and analysing data.
 
-v1.1 - Source and Target sheets defined, and set by sidebar.
+However, I recently realised that (as one might expect), when a new form entry is added, the entry is inserted. So if you have calculations in a separate sheet, it is difficult to copy these down in a simple way.
 
-v1.2 - Adding setting for target row to copy, and input box for entering this in settings.
+Thus, I decided to create a script that did the following:
 
-v1.3 - Forcing settings to be in place before refresh can be used (in progress).
+1: Check the responses (Source) sheet for new entries
+2: Verify this number against the number of calculations in the calculations (Targe) sheet.
+3: Copy a certain (user defined) row of data / formulae down the sheet for the applicable number of new responses.
+
+These settings are managed in a custom sidebar, and the script is run by a "Refresh" option in a menu.
+
+This certainly has helped with managing form responses when I've used them, so I hope it helps others.
